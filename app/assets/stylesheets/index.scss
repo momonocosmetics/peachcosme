@@ -1,0 +1,23 @@
+.cosmetics-container {
+    width: 50%;
+    margin: 10px auto;
+  }
+  h3 {
+    width: 100px;
+    margin: 30px auto;
+    text-align: center;
+  }
+  .cosmetic {
+    border-top: solid rgb(159, 155, 169);
+    margin-top: 10px;
+    padding-top: 20px;
+  }
+  .main-box {
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+  }
+  .time {
+    display: flex;
+    justify-content: flex-end;
+  }
