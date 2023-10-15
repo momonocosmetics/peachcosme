@@ -1,75 +1,62 @@
-<h1>レビュー一覧</h1>
 
 <%= stylesheet_link_tag 'index', :media => "all" %>
 
-<% if user_signed_in? %>
-  <%= link_to "マイページ", user_path(current_user.id) %>
-<% end %>
-
-<%= link_to "新規投稿", new_cosmetic_path %>
-<%= link_to "一覧に戻る", cosmetics_path %>
-
-<%= link_to "トップに戻る", cosmetics_top_path %>
-
-<h2>商品ジャンル検索</h2>
- <%= form_tag({controller:"cosmetics",action:"index"}, method: :get) do %>
-    <%= select_tag "search", raw("<option>リップ</option><option>チーク</option><option>ハイライト</option><option>シェーディング</option><option>ファンデーション</option><option>コンシーラー</option><option>下地</option><option>パウダー</option><option>アイシャドウ</option><option>アイブロウ</option><option>アイライナー</option><option>マスカラ</option><option>ヘアケア</option><option>スキンケア</option><option>その他</option>")  %>
-   <%= submit_tag '検索する'  %>
-<% end %>
-
-<h2>タグ検索</h2>
-<%= form_tag({controller:"cosmetics",action:"index"}, method: :get) do %>
-    <% Tag.all.each do |t| %>
-        <li><%= check_box :tag_ids, t.name %><%= t.name %></li>
-    <% end %>
-    <%= submit_tag '検索' %>
-<% end %>
-
-<%= page_entries_info @cosmetics %>
-<%= paginate @cosmetics %>
-
 <div class="cosmetics-container">
-  <% @cosmetics.each do |t| %>
-    <div class="cosmetic">
-        <%= link_to t.user.name, user_path(t.user.id) %>
-      
-        <%= image_tag t.image_url, size: "250x200" if t.image? %>
-        <%= t.name %>
-        <%= t.cost %>
-        <%= t.nayami %>
-        <%= t.about %>
-        <%= t.genre %>
-       
-        <% if user_signed_in? %>
-        <% if current_user.already_played?(t) %>
-            <%= button_to cosmetic_play_path(id: t.id, cosmetic_id: t.id), method: :delete do %>
-                <p>いいねを取り消す</p><%= t.plays.count %>
-            <% end %>
-        <% else %>
-            <%= button_to cosmetic_plays_path(id: t.id, cosmetic_id: t.id), method: :post do %>
-                <p>いいね</p><%= t.plays.count %>
-            <% end %>
-        <% end %>
-    <% else %>
-        <p>いいねの数 = </p><%= t.plays.count %>
+
+    <h1>レビュー一覧</h1>
+
+    <h2>商品ジャンル検索</h2>
+    <%= form_tag({controller:"cosmetics",action:"index"}, method: :get) do %>
+        <%= select_tag "search", raw("<option>リップ</option><option>チーク</option><option>ハイライト</option><option>シェーディング</option><option>ファンデーション</option><option>コンシーラー</option><option>下地</option><option>パウダー</option><option>アイシャドウ</option><option>アイブロウ</option><option>アイライナー</option><option>マスカラ</option><option>ヘアケア</option><option>スキンケア</option><option>その他</option>")  %>
+        <%= submit_tag '検索する'  %>
     <% end %>
-    </div>
 
-    <%= link_to "詳細へ", cosmetic_path(t.id) %>
-   
-    <% if user_signed_in? && current_user.id == t.user_id %>  
-    <%= link_to "編集する", edit_cosmetic_path(t.id) %>
-    <%= button_to "削除する", cosmetic_path(t.id), method: :delete %>
-  <% end %>
+    <h2>タグ検索</h2>
+    <%= form_tag({controller:"cosmetics",action:"index"}, method: :get) do %>
+        <% Tag.all.each do |t| %>
+            <li><%= check_box :tag_ids, t.name %><%= t.name %></li>
+        <% end %>
+        <%= submit_tag '検索' %>
+    <% end %>
+
+    <%= page_entries_info @cosmetics %>
+    <%= paginate @cosmetics %>
 
 
-  </div>
-  <% end %>
+    <% @cosmetics.each do |t| %>
+        <div class="cosmetic">
+            <%= link_to t.user.name, user_path(t.user.id) %>
+        
+            <%= image_tag t.image_url, size: "250x200" if t.image? %>
+            <%= t.name %>
+            <%= t.cost %>
+            <%= t.nayami %>
+            <%= t.about %>
+            <%= t.genre %>
+        
+            <% if user_signed_in? %>
+                <% if current_user.already_played?(t) %>
+                    <%= button_to cosmetic_play_path(id: t.id, cosmetic_id: t.id), method: :delete do %>
+                        <p>いいねを取り消す</p><%= t.plays.count %>
+                    <% end %>
+                <% else %>
+                    <%= button_to cosmetic_plays_path(id: t.id, cosmetic_id: t.id), method: :post do %>
+                        <p>いいね</p><%= t.plays.count %>
+                    <% end %>
+                <% end %>
+            <% else %>
+                <p>いいねの数 = </p><%= t.plays.count %>
+            <% end %>
+        </div>
 
-
+        <%= link_to "詳細へ", cosmetic_path(t.id) %>
+    
+        <% if user_signed_in? && current_user.id == t.user_id %>  
+            <%= link_to "編集する", edit_cosmetic_path(t.id) %>
+            <%= button_to "削除する", cosmetic_path(t.id), method: :delete %>
+        <% end %>
+    <% end %>
 </div>
-
-
 
 <%= form_tag({controller:"cosmetics",action:"index"}, method: :get) do %>
     <%= text_field_tag :tag %>

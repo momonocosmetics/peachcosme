@@ -1,4 +1,6 @@
 <h1>コスメレビュー</h1>
+<%= link_to "一覧に戻る", cosmetics_path %>
+
 <h3>投稿詳細</h3>
 <div class="cosmetic">
     <% @cosmetic.tags.each do |tag| %>
@@ -57,4 +59,3 @@
 
  </div>
 
-<%= link_to "一覧に戻る", cosmetics_path %>
