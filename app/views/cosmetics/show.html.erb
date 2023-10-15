@@ -8,11 +8,11 @@
     <p><%= @cosmetic.created_at %></p>
     <% if user_signed_in? %>
     <% if current_user.already_played?(@cosmetic) %>
-        <%= link_to cosmetic_play_path(@cosmetic), method: :delete do %>
+        <%= button_to cosmetic_play_path(@cosmetic), method: :delete do %>
         <p>いいねを取り消す</p><%= @cosmetic.plays.count %>
         <% end %>
     <% else %>
-        <%= link_to cosmetic_plays_path(@cosmetic), method: :post do %>
+        <%= button_to cosmetic_plays_path(@cosmetic), method: :post do %>
         <p>いいね</p><%= @cosmetic.plays.count %>
         <% end %>
     <% end %>
