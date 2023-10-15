@@ -22,7 +22,7 @@
   <p><%= @cosmetic.name %></p>
   <p><%= @cosmetic.cost %></p>
   <p><%= @cosmetic.nayami %></p>
-  <p><%= @cosmetic.image %></p>
+  <p><%= image_tag @cosmetic.image_url, size: "250x200" if @cosmetic.image? %></p>
   <p><%= @cosmetic.about %></p>
   <p><%= @cosmetic.genre %></p>
   <p><%= @cosmetic.created_at %></p>
