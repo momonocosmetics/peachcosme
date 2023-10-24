@@ -22,17 +22,24 @@
     <%= page_entries_info @cosmetics %>
     <%= paginate @cosmetics %>
 
+    <h2>投稿一覧</h2>
 
     <% @cosmetics.each do |t| %>
+       
         <div class="cosmetic">
-            <%= link_to t.user.name, user_path(t.user.id) %>
-        
+            投稿者 <%= link_to t.user.name, user_path(t.user.id) %>
+            <br>
             <%= image_tag t.image_url, size: "250x200" if t.image? %>
+            <br>
             <%= t.name %>
-            <%= t.cost %>
-            <%= t.nayami %>
-            <%= t.about %>
-            <%= t.genre %>
+            <br>
+            <%= t.cost %>円
+            <br>
+            肌質 <%= t.nayami %>
+            <br>
+            商品説明 <%= t.about %>
+            <br>
+            商品ジャンル <%= t.genre %>
         
             <% if user_signed_in? %>
                 <% if current_user.already_played?(t) %>
@@ -55,11 +62,6 @@
             <%= link_to "編集する", edit_cosmetic_path(t.id) %>
             <%= button_to "削除する", cosmetic_path(t.id), method: :delete %>
         <% end %>
+
     <% end %>
 </div>
-
-<%= form_tag({controller:"cosmetics",action:"index"}, method: :get) do %>
-    <%= text_field_tag :tag %>
-    <%= submit_tag 'タグを追加' %>
-<% end %>
-

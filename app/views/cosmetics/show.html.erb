@@ -1,61 +1,77 @@
-<h1>コスメレビュー</h1>
-<%= link_to "一覧に戻る", cosmetics_path %>
+<%= stylesheet_link_tag 'show', :media => "all" %>
 
-<h3>投稿詳細</h3>
-<div class="cosmetic">
-    <% @cosmetic.tags.each do |tag| %>
-        <span><%= tag.name %></span>
+<div class="show-container">
+
+  <%= link_to "一覧に戻る", cosmetics_path %>
+
+  <h2>投稿詳細</h2>
+  <div class="cosmetic">
+     検索タグ  
+     <br>
+      <% @cosmetic.tags.each do |tag| %>
+          <span><%= tag.name %></span>
+      <% end %>
+
+     
+      <% if user_signed_in? %>
+      <% if current_user.already_played?(@cosmetic) %>
+          <%= button_to cosmetic_play_path(@cosmetic), method: :delete do %>
+          <p>いいねを取り消す</p><%= @cosmetic.plays.count %>
+          <% end %>
+      <% else %>
+          <%= button_to cosmetic_plays_path(@cosmetic), method: :post do %>
+          <p>いいね</p><%= @cosmetic.plays.count %>
+          <% end %>
+      <% end %>
+      <% else %>
+      <p>いいねの数 = </p><%= @cosmetic.plays.count %>
+      <% end %>
+    <br>
+    商品名 <p><%= @cosmetic.name %></p>
+    <br>
+    価格 <p><%= @cosmetic.cost %></p> 
+    <br>
+    肌質 <p><%= @cosmetic.nayami %></p>
+    <br>
+    商品の写真 <p><%= image_tag @cosmetic.image_url, size: "250x200" if @cosmetic.image? %></p>
+    <br>
+    商品の説明 <p><%= @cosmetic.about %></p>
+    <br>
+    商品ジャンル <p><%= @cosmetic.genre %></p>
+    <br>
+    投稿日時 <p><%= @cosmetic.created_at %></p>
+    <%= link_to "編集する", edit_cosmetic_path(@cosmetic.id) %>
+
+  </div>
+
+  <div class="like">
+    <h3>いいねしたユーザー</h3>
+    <% @cosmetic.played_users.each do |user| %>
+      <li><%= user.name %></li>
+    <% end %>
+  </div>
+
+  <div class="comment-wrapper">
+    <p>コメント一覧</p>
+    <% @comments.each do |c| %>
+      <div>
+        <%= c.user.name unless c.user.blank? %>
+        <br>
+        <%= c.content %>
+      </div>
+        <br>
     <% end %>
 
-    <p><%= @cosmetic.created_at %></p>
     <% if user_signed_in? %>
-    <% if current_user.already_played?(@cosmetic) %>
-        <%= button_to cosmetic_play_path(@cosmetic), method: :delete do %>
-        <p>いいねを取り消す</p><%= @cosmetic.plays.count %>
+      <%= form_with(model: [@cosmetic, @comment], local: true) do |f| %>
+        <%= f.text_area :content %>
+        <%= button_tag type: "submit" do %>
+          <i class="far fa-comments"></i> コメントする
         <% end %>
-    <% else %>
-        <%= button_to cosmetic_plays_path(@cosmetic), method: :post do %>
-        <p>いいね</p><%= @cosmetic.plays.count %>
-        <% end %>
-    <% end %>
-    <% else %>
-    <p>いいねの数 = </p><%= @cosmetic.plays.count %>
-    <% end %>
-  <p><%= @cosmetic.name %></p>
-  <p><%= @cosmetic.cost %></p>
-  <p><%= @cosmetic.nayami %></p>
-  <p><%= image_tag @cosmetic.image_url, size: "250x200" if @cosmetic.image? %></p>
-  <p><%= @cosmetic.about %></p>
-  <p><%= @cosmetic.genre %></p>
-  <p><%= @cosmetic.created_at %></p>
-  <%= link_to "編集する", edit_cosmetic_path(@cosmetic.id) %>
-
-</div>
-
-<h2>いいねしたユーザー</h2>
-<% @cosmetic.played_users.each do |user| %>
-  <li><%= user.name %></li>
-<% end %>
-
-<div class="comment-wrapper">
-  <p>コメント一覧</p>
-  <% @comments.each do |c| %>
-    <div>
-      <%= c.user.name unless c.user.blank? %>
-      <br>
-      <%= c.content %>
-    </div>
-      <br>
-  <% end %>
-
-  <% if user_signed_in? %>
-    <%= form_with(model: [@cosmetic, @comment], local: true) do |f| %>
-      <%= f.text_area :content %>
-      <%= button_tag type: "submit" do %>
-        <i class="far fa-comments"></i> コメントする
       <% end %>
     <% end %>
-  <% end %>
 
- </div>
+  </div>
+
+</div>
 
